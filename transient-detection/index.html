@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="keyword 1, keyword 2, keyword 3" name="keywords">
+<meta content="Tyler Jones" name="author">
+<meta property="og:title" content="Transient Detection - /home/tdjones">
+<meta property="og:url" content="https://tjones879.github.io/blog/transient-detection/">
+<meta property="og:description" content="Your description here">
+<meta property="og:type" content="website" />
+<title>Transient Detection | /home/tdjones</title>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<link rel="stylesheet" href="https://tjones879.github.io/blog/css/style.css">
+<link rel="shortcut icon" href="https://tjones879.github.io/blog/wave.ico">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" integrity="sha256-Zd1icfZ72UBmsId/mUcagrmN7IN5Qkrvh75ICHIQVTk=" crossorigin="anonymous" />
+
+</head>
+
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://tjones879.github.io/blog"><h1 class="title is-4">/home/tdjones</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/tjones879" target="_blank">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml" target="_blank">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="mailto:tdjones879@gmail.com" target="_blank">
+            <span class="icon">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Transient Detection</h1>
+    <h2 class="subtitle is-5">August 7, 2017 by Tyler Jones</h2>
+    
+    <div class="content">
+      <p></p>
+
+<p><em>This is part of a series of posts designed to document the processes I followed
+to improve FFmpeg&rsquo;s native vorbis encoder.</em></p>
+
+<p>In many modern lossy audio codecs, there occurs a phenomenon called pre-echo. It
+can be easily noticed as hearing a faint echo of a sound before it should
+actually occur. It actually sounds exactly like it is described.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/File:Genesis-Duke-LPpreecho.ogg">This</a> sample
+found on Wikipedia is amplified to be more noticeable. It is possible to hear
+an echo in the first couple seconds. Although it is not always noticeable in
+practice, pre-echo is significant problem that needs solved in many codecs.</p>
+
+<p>This challenge has some interesting qualities:</p>
+
+<ol>
+<li><p>While we know why pre-echos occur, there are only heuristics that help
+predict when a pre-echo will possibly occur. Our attempts to prevent them
+down to estimation and must balance aggressiveness to not negatively impact
+the quality of audio in other ways.</p></li>
+
+<li><p>Prevention of pre-echo must be done very efficiently. We hope to contribute
+little to the overall runtime of the encoder.</p></li>
+
+<li><p>Different listeners may perceive the output of our system differently than
+others. With different listening equipment and the wide variety of audio
+files available, we must not be too aggressive in transient avoidance.</p></li>
+</ol>
+
+<p>Our requirements fall partially at odds with each other, so we must be careful
+in balancing each component.</p>
+
+<h3 id="categorization-of-sound">Categorization of Sound</h3>
+
+<p>If you recall from high-school physics, sound waves follow a periodic nature.
+This obviously changes based on the source of our sound. We can definitively say
+that a normal cello&rsquo;s A string will produce a sound at a primary frequency of
+220 Hz.</p>
+
+<p>In contrast, a <em>transient signal</em> can be seen as a short burst signal that
+doesn&rsquo;t show the same periodic behavior of other audio[^2]. Common sources
+include drum hits and cymbals. It is common for transient signals occur at high
+frequencies, and the transient effect often exists at a frequency different
+vastly different from the bulk of the signal.</p>
+
+<p>/* Imagine that we want to describe a series of whistles which can produce pure
+tones. We can either explain it as a series of sounds at certain time intervals,
+or we can understand it as a series of notes at certain frequencies. This song
+can be translated between the <em>time domain</em> and <em>frequency domain</em>. It turns out
+that encoding audio in the frequency domain is very efficient. */</p>
+
+<p>Most of our modern audio codecs use transforms<sup class="footnote-ref" id="fnref:transforms"><a rel="footnote" href="#fn:transforms">1</a></sup> to convert audio
+samples from the time domain to the frequency domain by approximating our data
+with a series of periodic functions. The purpose is to be able to estimate the
+signal at any point in time just from these functions. Vorbis I uses the
+<a href="a.com">MDCT-IV</a>.</p>
+
+<p>One of our goals is to manipulate the <a href="a.com">uncertainty principle</a> in a way
+that improves quality. When we partition samples into larger blocks, we have a
+greater resolution in the <strong>frequency domain</strong>. We can more accurately analyze
+the frequency components of our signals. However, we lose our certainty in
+saying when those signals occur. In other words, we get a poorer resolution in
+the <strong>time domain</strong>. Intuitively, the opposite occurs when we lower the block
+size. You can <em>see</em> and <em>hear</em> the changes in resolution:</p>
+
+<p>[cello-long]() [cello-short]()</p>
+
+<p>For efficiency reasons, encoders typically use large blocks of samples. This
+means that we get great spectral resolution, but we lose information about when
+a signal occurs. This signal essentially gets spread over the entire block in
+time.</p>
+
+<p>Much of what we hear in music <em>can</em> be approximated fairly well.  Transient
+signals are an exception to this and are very difficult to approximate in the
+amount of terms available within our frequency transform. This failure causes
+the decoder to decode signals before or after they really occur.</p>
+
+<h3 id="what-is-a-possible-solution">What is a possible solution?</h3>
+
+<p>Many audio formats, Vorbis included, allow for variable block lengths. Long
+blocks are far more efficient to transform and encode, so we use them as
+default. The obvious solution is to switch to shorter blocks when its necessary!
+It&rsquo;s really as simple as that, and short blocks will contribute a noticeable
+improvement in quality.</p>
+
+<p>Our frequency transform will always introduce uncertainty in time locality, so
+we must find out how largest blocks we are allowed to use before we can perceive
+them. <a href="a.com">Psychoacoustics</a> deal with understanding how the human auditory
+system actually works. Well-known researchers found in the mid 20th century that
+special temporal masking occurs before and after loud noise. Noise is partially
+masked for 2.5ms before you actually perceive a sound.</p>
+
+<p>Some quick napkin math reveals:</p>
+
+<p>$$2.5ms * 1s / 1000ms = X samples * 1s / 44000 samples$$
+$$X = 2.5 * 44 = 110 samples$$</p>
+
+<p>Our closest power of 2 is 128 samples. This means that if use 128-sample blocks,
+then there is a very high chance of masking the pre-echo with the signal itself!</p>
+
+<h3 id="how-do-we-detect-transients">How do we detect transients?</h3>
+
+<p>Now the story is set: we (1) know the challenges the system imposes, (2)
+understand the behavior of transient signals, and (3) know how to limit their
+impact. The only thing that is left is to be able to accurately determine when
+this is occurring.</p>
+
+<p>In practice, pre-echos are not as obvious as the sample above. Looking at the
+raw data will not reveal much of anything by itself.</p>
+
+<p>First remember that transient signals will often emit high frequencies that do
+not necessarily align with their fundamental frequency. Let&rsquo;s filter out low
+frequency signals.</p>
+
+<p>I arbitrarily chose <sup>1</sup>&frasl;<sub>4</sub> of the nyquist frequency as our critical frequency and
+used a 4th order highpass butterworth filter. This will introduce minimal
+distortion in area of interest. Since the filtered data will never be encoded,
+we do not worry about the poor impulse response from the IIR.  We also do not
+really need to worry about any run speed impact from filters as they are
+generally cheap.</p>
+
+<p>We now have a more useful set of data, so how do we classify whether a signal is
+transient? A lot of the common sources of transients include instruments that
+produce a sharp attack. You could possibly estimate the derivative of the input
+stream and wait for a sharp jump. However, that is inefficient and too prone to
+error.</p>
+
+<p>I begin analysis surrounding the boundary between two frames. Moving through
+both frames of data, I filter all of our low-frequency samples out of the input.
+We know that low-frequency sources are not likely to pose quantization problems,
+and they often dominate the appearance of the overall waveform.</p>
+
+<p>filtered samples</p>
+
+<p>Our data is more easily analysed, and only the part we are interested in is
+presented to us. We have discussed that transients are often non-periodic, and
+as a result, we can also suspect that the block containing it will have a
+significantly larger variance than previous samples.</p>
+
+<p>(std dev) variance of samples</p>
+
+<p>If we multiply previous blocks by some threshold and find that our current block
+is larger, than we can predict, with some amount of certainty, that a transient
+has occurred and its pre-echo would be significant.</p>
+
+<p>We must avoid switching transforms too aggressively to avoid noticeable
+artifacts.</p>
+
+<h3 id="other-resources">Other Resources</h3>
+
+<p>If the signal processing components interest you, I&rsquo;d highly recommend the
+wonderful [everyday dsp](). This will go all the way to basic filtering in a
+clear and visually engaging way. Want to go more in-depth? Read the very
+thorough [DSP]() book that treats fundamentals from a mathematic perspective.</p>
+
+<p>Want to know more about audio encoding? The hydrogen media [forums]() and
+[wiki]() are great at describing some of these algorithms from a high level
+perspective.  Some of FFmpeg&rsquo;s native encoders provide very readable
+implementations if you want a deeper understanding.</p>
+
+<p><em>FFmpeg is an open source software. Being such, if you&rsquo;d like to see the actual
+implementation of this, feel free to reference the source in a git repo near
+you!</em></p>
+
+<p><em>Have questions, comments, or suggestions? As usual, please feel free to contact
+me via !!!email!!! or !!!social media!!!.</em></p>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:transforms">a.
+ <a class="footnote-return" href="#fnref:transforms"><sup>[return]</sup></a></li>
+</ol>
+</div>
+    </div>
+    
+        <div class="nav-left">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2ftjones879.github.io%2fblog%2ftransient-detection%2f" title="Share on Facebook" target="_blank"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2ftjones879.github.io%2fblog%2ftransient-detection%2f" title="Share on Google+" target="_blank"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftjones879.github.io%2fblog%2ftransient-detection%2f" title="Share on LinkedIn" target="_blank"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=Transient%20Detection - https%3a%2f%2ftjones879.github.io%2fblog%2ftransient-detection%2f" title="Tweet this" target="_blank"><span class="fa fa-twitter fa-2x"></span></a>
+    <a class="nav-item" href="http://www.reddit.com/submit?url=https%3a%2f%2ftjones879.github.io%2fblog%2ftransient-detection%2f&title=Transient%20Detection" title="Share on Reddit" target="_blank"><span class="fa fa-reddit-alien fa-2x" aria-hidden="true"></span></a>
+    
+    </div>
+    
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; 2017 Tyler Jones</p>
+  </div>
+</section>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>

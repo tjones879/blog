@@ -6,19 +6,29 @@
     <description>Recent content on /home/tdjones</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>&amp;copy; 2017</copyright>
-    <lastBuildDate>Mon, 07 Aug 2017 15:33:35 -0600</lastBuildDate>
+    <copyright>&amp;copy; 2017 Tyler Jones</copyright>
+    <lastBuildDate>Mon, 14 Aug 2017 18:36:21 -0600</lastBuildDate>
     
 	<atom:link href="https://tjones879.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>My First Post</title>
-      <link>https://tjones879.github.io/blog/posts/my-first-post/</link>
-      <pubDate>Mon, 07 Aug 2017 15:33:35 -0600</pubDate>
+      <title>GSoC 2017 -- A Postmortem</title>
+      <link>https://tjones879.github.io/blog/gsoc-2017/</link>
+      <pubDate>Mon, 14 Aug 2017 18:36:21 -0600</pubDate>
       
-      <guid>https://tjones879.github.io/blog/posts/my-first-post/</guid>
-      <description></description>
+      <guid>https://tjones879.github.io/blog/gsoc-2017/</guid>
+      <description>GSoC 2017 is quickly coming to a close, and I wanted to keep a log of my decisions and changes over the past few months in a single post. This will hopefully serve as a component of my final submission alongside the corresponding mailing-list threads and git commits.
+For anybody that has not read my previous posts on this blog and wants to learn more about some of the things discussed here, please read those posts and provide me with any feedback you have.</description>
+    </item>
+    
+    <item>
+      <title>Transient Detection</title>
+      <link>https://tjones879.github.io/blog/transient-detection/</link>
+      <pubDate>Mon, 07 Aug 2017 18:38:10 -0600</pubDate>
+      
+      <guid>https://tjones879.github.io/blog/transient-detection/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

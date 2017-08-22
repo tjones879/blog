@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="keyword 1, keyword 2, keyword 3" name="keywords">
+<meta content="Tyler Jones" name="author">
+<meta property="og:title" content="First Post - /home/tdjones">
+<meta property="og:url" content="https://tjones879.github.io/blog/first-post/">
+<meta property="og:description" content="Your description here">
+<meta property="og:type" content="website" />
+<title>First Post | /home/tdjones</title>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<link rel="stylesheet" href="https://tjones879.github.io/blog/css/style.css">
+<link rel="shortcut icon" href="https://tjones879.github.io/blog/wave.ico">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" integrity="sha256-Zd1icfZ72UBmsId/mUcagrmN7IN5Qkrvh75ICHIQVTk=" crossorigin="anonymous" />
+
+</head>
+
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://tjones879.github.io/blog"><h1 class="title is-4">/home/tdjones</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/tjones879" target="_blank">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml" target="_blank">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">First Post</h1>
+    <h2 class="subtitle is-5">August 7, 2017 by Tyler Jones</h2>
+    
+    <div class="content">
+      <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">var</span> <span style="color: #f92672">=</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+<span style="color: #66d9ef">typedef</span> <span style="color: #66d9ef">struct</span> <span style="color: #f8f8f2">clazz</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">a;</span>
+	<span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">b;</span>
+<span style="color: #f8f8f2">}</span> <span style="color: #f8f8f2">clazz;</span>
+</pre></div>
+
+
+<pre><code class="language-c">int ff_psy_vorbis_block_frame(VorbisPsyContext *vpctx, float *audio,
+                              int ch, int frame_size, int block_size)
+{
+    int i, block_flag = 1;
+    int blocks = frame_size / block_size;
+    float last_var;
+    const float eps = 0.0001f;
+    float *var = vpctx-&gt;variance + ch * blocks;
+
+    for (i = 0; i &lt; frame_size; i++) {
+        apply_filter(&amp;vpctx-&gt;filter[0], audio[i], vpctx-&gt;filter_delay + 4 * ch);
+        apply_filter(&amp;vpctx-&gt;filter[1], audio[i], vpctx-&gt;filter_delay + 4 * ch + 2);
+    }
+
+    for (i = 0; i &lt; blocks; i++) {
+        last_var = var[i];
+        var[i] = variance(audio + i * block_size, block_size, vpctx-&gt;fdsp);
+
+        /* A small constant is added to the threshold in order to prevent false
+         * transients from being detected when quiet sounds follow near-silence */
+        if (var[i] &gt; vpctx-&gt;preecho_thresh * last_var + eps)
+            block_flag = 0;
+    }
+
+    return block_flag;
+}
+</code></pre>
+
+    </div>
+    
+        <div class="nav-left">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2ftjones879.github.io%2fblog%2ffirst-post%2f" title="Share on Facebook" target="_blank"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2ftjones879.github.io%2fblog%2ffirst-post%2f" title="Share on Google+" target="_blank"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftjones879.github.io%2fblog%2ffirst-post%2f" title="Share on LinkedIn" target="_blank"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=First%20Post - https%3a%2f%2ftjones879.github.io%2fblog%2ffirst-post%2f" title="Tweet this" target="_blank"><span class="fa fa-twitter fa-2x"></span></a>
+    <a class="nav-item" href="http://www.reddit.com/submit?url=https%3a%2f%2ftjones879.github.io%2fblog%2ffirst-post%2f&title=First%20Post" title="Share on Reddit" target="_blank"><span class="fa fa-reddit-alien fa-2x" aria-hidden="true"></span></a>
+    
+    </div>
+    
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; 2017 Tyler Jones</p>
+  </div>
+</section>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>

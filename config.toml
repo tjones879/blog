@@ -1,4 +1,40 @@
+<<<<<<< HEAD
 baseURL = "https://blog.tdjones.dev/"
 languageCode = "en-us"
 title = "Tyler Jones"
 theme = "tufte"
+=======
+baseurl = "https://tjones879.github.io/blog"
+languageCode = "en"
+title = "/home/tdjones"
+theme = "hucore"
+copyright = "&copy; 2018 Tyler Jones"
+
+pygmentsStyle = "perldoc"
+pygmentsUseClasses = false
+
+[taxonomies]
+tag = "tags"
+category = "categories"
+
+[params]
+description = "Your description here"
+keywords = ["keyword 1", "keyword 2", "keyword 3"]
+author = "Tyler Jones"
+sharingicons = true
+
+[permalinks]
+post = ":filename"
+
+[[params.social]]
+url = "https://github.com/tjones879"
+fa_icon = "fa-github"
+
+[[params.social]]
+url = "https://www.linkedin.com/in/tdjones879/"
+fa_icon = "fa-linkedin-square"
+
+[[params.social]]
+url = "mailto:tdjones879@gmail.com"
+fa_icon = "fa-envelope"
+>>>>>>> e0134fb... Update copyright. Add linkedin

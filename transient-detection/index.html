@@ -43,9 +43,9 @@
             </span>
           </a>
           
-          <a class="level-item" href="/index.xml" target="_blank">
+          <a class="level-item" href="https://www.linkedin.com/in/tdjones879/" target="_blank">
             <span class="icon">
-              <i class="fa fa-rss"></i>
+              <i class="fa fa-linkedin-square"></i>
             </span>
           </a>
           
@@ -108,32 +108,30 @@ that a normal cello&rsquo;s A string will produce a sound at a primary frequency
 220 Hz.</p>
 
 <p>In contrast, a <em>transient signal</em> can be seen as a short burst signal that
-doesn&rsquo;t show the same periodic behavior of other audio[^2]. Common sources
+doesn&rsquo;t show the same periodic behavior of other audio. Common sources
 include drum hits and cymbals. It is common for transient signals occur at high
 frequencies, and the transient effect often exists at a frequency different
 vastly different from the bulk of the signal.</p>
 
-<p>/* Imagine that we want to describe a series of whistles which can produce pure
+<p>Imagine that we want to describe a series of whistles which can produce pure
 tones. We can either explain it as a series of sounds at certain time intervals,
 or we can understand it as a series of notes at certain frequencies. This song
 can be translated between the <em>time domain</em> and <em>frequency domain</em>. It turns out
-that encoding audio in the frequency domain is very efficient. */</p>
+that encoding audio in the frequency domain is very efficient.</p>
 
-<p>Most of our modern audio codecs use transforms<sup class="footnote-ref" id="fnref:transforms"><a rel="footnote" href="#fn:transforms">1</a></sup> to convert audio
+<p>Most of our modern audio codecs use transforms to convert audio
 samples from the time domain to the frequency domain by approximating our data
 with a series of periodic functions. The purpose is to be able to estimate the
 signal at any point in time just from these functions. Vorbis I uses the
-<a href="a.com">MDCT-IV</a>.</p>
+MDCT-IV.</p>
 
-<p>One of our goals is to manipulate the <a href="a.com">uncertainty principle</a> in a way
-that improves quality. When we partition samples into larger blocks, we have a
+<p>One of our goals is to manipulate the uncertainty principle in a way that
+improves quality. When we partition samples into larger blocks, we have a
 greater resolution in the <strong>frequency domain</strong>. We can more accurately analyze
 the frequency components of our signals. However, we lose our certainty in
 saying when those signals occur. In other words, we get a poorer resolution in
 the <strong>time domain</strong>. Intuitively, the opposite occurs when we lower the block
-size. You can <em>see</em> and <em>hear</em> the changes in resolution:</p>
-
-<p>[cello-long]() [cello-short]()</p>
+size.</p>
 
 <p>For efficiency reasons, encoders typically use large blocks of samples. This
 means that we get great spectral resolution, but we lose information about when
@@ -155,8 +153,8 @@ improvement in quality.</p>
 
 <p>Our frequency transform will always introduce uncertainty in time locality, so
 we must find out how largest blocks we are allowed to use before we can perceive
-them. <a href="a.com">Psychoacoustics</a> deal with understanding how the human auditory
-system actually works. Well-known researchers found in the mid 20th century that
+them. Psychoacoustics deal with understanding how the human auditory system
+actually works. Well-known researchers found in the mid 20th century that
 special temporal masking occurs before and after loud noise. Noise is partially
 masked for 2.5ms before you actually perceive a sound.</p>
 
@@ -185,20 +183,28 @@ frequency signals.</p>
 <p>I arbitrarily chose <sup>1</sup>&frasl;<sub>4</sub> of the nyquist frequency as our critical frequency and
 used a 4th order highpass butterworth filter. This will introduce minimal
 distortion in area of interest. Since the filtered data will never be encoded,
-we do not worry about the poor impulse response from the IIR.  We also do not
-really need to worry about any run speed impact from filters as they are
-generally cheap.</p>
+we do not worry about the poor impulse response from the IIR. Our filters are
+also cheap enough computationally and stable numerically to avoid any extra
+scrutiny.</p>
+
+<p>We also know that low-frequency signals often dominate the appearance of the
+total waveform, but typically pose little difficulty for quantization.</p>
 
 <p>We now have a more useful set of data, so how do we classify whether a signal is
-transient? A lot of the common sources of transients include instruments that
-produce a sharp attack. You could possibly estimate the derivative of the input
+transient? The most common sources of transients include sharp attacks (light
+brass and percussion). You could monitor the input stream and just wait for any
+sudden movements. Some encoders use a method similar to this by breaking down
+frames into bands and summing the total energy for each. This works well for
+isolated attacks but becomes less effective with busy tracks (much of modern pop
+music).</p>
+
+<p>You could possibly estimate the derivative of the input
 stream and wait for a sharp jump. However, that is inefficient and too prone to
 error.</p>
 
-<p>I begin analysis surrounding the boundary between two frames. Moving through
-both frames of data, I filter all of our low-frequency samples out of the input.
-We know that low-frequency sources are not likely to pose quantization problems,
-and they often dominate the appearance of the overall waveform.</p>
+<p>the input.  We know that low-frequency sources are not likely to pose
+quantization problems, and they often dominate the appearance of the overall
+waveform.</p>
 
 <p>filtered samples</p>
 
@@ -206,8 +212,6 @@ and they often dominate the appearance of the overall waveform.</p>
 presented to us. We have discussed that transients are often non-periodic, and
 as a result, we can also suspect that the block containing it will have a
 significantly larger variance than previous samples.</p>
-
-<p>(std dev) variance of samples</p>
 
 <p>If we multiply previous blocks by some threshold and find that our current block
 is larger, than we can predict, with some amount of certainty, that a transient
@@ -219,30 +223,21 @@ artifacts.</p>
 <h3 id="other-resources">Other Resources</h3>
 
 <p>If the signal processing components interest you, I&rsquo;d highly recommend the
-wonderful [everyday dsp](). This will go all the way to basic filtering in a
-clear and visually engaging way. Want to go more in-depth? Read the very
-thorough [DSP]() book that treats fundamentals from a mathematic perspective.</p>
+wonderful <a href="https://sam-koblenski.blogspot.com/2015/08/everyday-dsp-for-programmers-basic.html">everyday dsp</a>.
+This will go all the way to basic filtering in a clear and visually engaging
+way.</p>
 
-<p>Want to know more about audio encoding? The hydrogen media [forums]() and
-[wiki]() are great at describing some of these algorithms from a high level
-perspective.  Some of FFmpeg&rsquo;s native encoders provide very readable
-implementations if you want a deeper understanding.</p>
+<p>Want to know more about audio encoding? The hydrogen media <a href="https://hydrogenaud.io/">forums</a> and
+<a href="https://wiki.hydrogenaud.io">wiki</a> are great at describing some of these algorithms from a high level.
+Some of FFmpeg&rsquo;s native encoders provide very readable implementations if you
+want a deeper understanding.</p>
 
 <p><em>FFmpeg is an open source software. Being such, if you&rsquo;d like to see the actual
 implementation of this, feel free to reference the source in a git repo near
 you!</em></p>
 
 <p><em>Have questions, comments, or suggestions? As usual, please feel free to contact
-me via !!!email!!! or !!!social media!!!.</em></p>
-<div class="footnotes">
-
-<hr />
-
-<ol>
-<li id="fn:transforms">a.
- <a class="footnote-return" href="#fnref:transforms"><sup>[return]</sup></a></li>
-</ol>
-</div>
+me via email!</em></p>
     </div>
     
         <div class="nav-left">
@@ -260,12 +255,14 @@ me via !!!email!!! or !!!social media!!!.</em></p>
 
 <section class="section">
   <div class="container has-text-centered">
-    <p>&copy; 2017 Tyler Jones</p>
+    <p>&copy; 2018 Tyler Jones</p>
   </div>
 </section>
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js" integrity="sha256-+bhVTaRmJ/c07eV80nU8gD2cBBF0rYkf1txqXlrbvb0=" crossorigin="anonymous"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>

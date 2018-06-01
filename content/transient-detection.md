@@ -41,18 +41,18 @@ that a normal cello's A string will produce a sound at a primary frequency of
 220 Hz.
 
 In contrast, a *transient signal* can be seen as a short burst signal that
-doesn't show the same periodic behavior of other audio[^2]. Common sources
+doesn't show the same periodic behavior of other audio. Common sources
 include drum hits and cymbals. It is common for transient signals occur at high
 frequencies, and the transient effect often exists at a frequency different
 vastly different from the bulk of the signal.
 
-/* Imagine that we want to describe a series of whistles which can produce pure
+Imagine that we want to describe a series of whistles which can produce pure
 tones. We can either explain it as a series of sounds at certain time intervals,
 or we can understand it as a series of notes at certain frequencies. This song
 can be translated between the *time domain* and *frequency domain*. It turns out
-that encoding audio in the frequency domain is very efficient. */
+that encoding audio in the frequency domain is very efficient.
 
-Most of our modern audio codecs use transforms[^transforms] to convert audio
+Most of our modern audio codecs use transforms to convert audio
 samples from the time domain to the frequency domain by approximating our data
 with a series of periodic functions. The purpose is to be able to estimate the
 signal at any point in time just from these functions. Vorbis I uses the
@@ -156,11 +156,12 @@ artifacts.
 ### Other Resources
 
 If the signal processing components interest you, I'd highly recommend the
-wonderful [everyday dsp](). This will go all the way to basic filtering in a
-clear and visually engaging way. Want to go more in-depth?
+wonderful [everyday dsp](https://sam-koblenski.blogspot.com/2015/08/everyday-dsp-for-programmers-basic.html).
+This will go all the way to basic filtering in a clear and visually engaging
+way.
 
-Want to know more about audio encoding? The hydrogen media [forums]() and
-[wiki]() are great at describing some of these algorithms from a high level.
+Want to know more about audio encoding? The hydrogen media [forums](https://hydrogenaud.io/) and
+[wiki](https://wiki.hydrogenaud.io) are great at describing some of these algorithms from a high level.
 Some of FFmpeg's native encoders provide very readable implementations if you
 want a deeper understanding.
 
@@ -169,7 +170,4 @@ implementation of this, feel free to reference the source in a git repo near
 you!*
 
 *Have questions, comments, or suggestions? As usual, please feel free to contact
-me via !!!email!!! or !!!social media!!!.*
-
-[^preecho]: a.
-[^transforms]: a.
+me via email!*

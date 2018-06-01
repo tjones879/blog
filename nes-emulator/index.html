@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="keyword 1, keyword 2, keyword 3" name="keywords">
+<meta content="Tyler Jones" name="author">
+<meta property="og:title" content="Building a NES Emulator - /home/tdjones">
+<meta property="og:url" content="https://tjones879.github.io/blog/nes-emulator/">
+<meta property="og:description" content="Your description here">
+<meta property="og:type" content="website" />
+<title>Building a NES Emulator | /home/tdjones</title>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<link rel="stylesheet" href="https://tjones879.github.io/blog/css/style.css">
+<link rel="shortcut icon" href="https://tjones879.github.io/blog/wave.ico">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" integrity="sha256-Zd1icfZ72UBmsId/mUcagrmN7IN5Qkrvh75ICHIQVTk=" crossorigin="anonymous" />
+
+</head>
+
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://tjones879.github.io/blog"><h1 class="title is-4">/home/tdjones</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/tjones879" target="_blank">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="https://www.linkedin.com/in/tdjones879/" target="_blank">
+            <span class="icon">
+              <i class="fa fa-linkedin-square"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="mailto:tdjones879@gmail.com" target="_blank">
+            <span class="icon">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Building a NES Emulator</h1>
+    <h2 class="subtitle is-5">May 31, 2018 by Tyler Jones</h2>
+    
+    <div class="content">
+      
+
+<p>I&rsquo;ve recently gotten into learning how to write emulators. It is generally
+recommended for newcomers to start by writing a <a href="https://en.wikipedia.org/wiki/CHIP-8">CHIP8</a>
+emulator. This is a simple 8 bit virtual machine that demonstrates many
+components of simple emulator design.</p>
+
+<p>For experienced developers, CHIP8 should not pose much of a problem. Popular
+systems to move onto are the very popular NES and GBA. These are still
+relatively simple systems but start to pose actual design requirements. Being
+based on real hardware systems, these consoles pose a more difficult problem
+than CHIP8.</p>
+
+<p>I chose to build a NES emulator after remembering many of my favorite classic
+games on that platform.</p>
+
+<p>I am also taking this as an opportunity to teach myself Rust. While becoming
+familiar with ANSI C and modern C++, I recognized a great situation to learn
+Rust.</p>
+
+<p>This blog series will cover my adventures in developing <a href="https://github.com/tjones879/RustiNES">RustiNES</a>,
+one of the several NES emulators written in Rust. These posts will also help
+serve as a reference for myself and hopefully others.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+<li><a href="https://tjones879.github.io/blog/nes-architecture/">NES Architecture</a></li>
+</ol>
+
+<h2 id="resources">Resources</h2>
+
+    </div>
+    
+        <div class="nav-left">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-emulator%2f" title="Share on Facebook" target="_blank"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-emulator%2f" title="Share on Google+" target="_blank"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-emulator%2f" title="Share on LinkedIn" target="_blank"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=Building%20a%20NES%20Emulator - https%3a%2f%2ftjones879.github.io%2fblog%2fnes-emulator%2f" title="Tweet this" target="_blank"><span class="fa fa-twitter fa-2x"></span></a>
+    <a class="nav-item" href="http://www.reddit.com/submit?url=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-emulator%2f&title=Building%20a%20NES%20Emulator" title="Share on Reddit" target="_blank"><span class="fa fa-reddit-alien fa-2x" aria-hidden="true"></span></a>
+    
+    </div>
+    
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; 2018 Tyler Jones</p>
+  </div>
+</section>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js" integrity="sha256-+bhVTaRmJ/c07eV80nU8gD2cBBF0rYkf1txqXlrbvb0=" crossorigin="anonymous"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>

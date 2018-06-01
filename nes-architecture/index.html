@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="keyword 1, keyword 2, keyword 3" name="keywords">
+<meta content="Tyler Jones" name="author">
+<meta property="og:title" content="NES Architecture - /home/tdjones">
+<meta property="og:url" content="https://tjones879.github.io/blog/nes-architecture/">
+<meta property="og:description" content="Your description here">
+<meta property="og:type" content="website" />
+<title>NES Architecture | /home/tdjones</title>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<link rel="stylesheet" href="https://tjones879.github.io/blog/css/style.css">
+<link rel="shortcut icon" href="https://tjones879.github.io/blog/wave.ico">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" integrity="sha256-Zd1icfZ72UBmsId/mUcagrmN7IN5Qkrvh75ICHIQVTk=" crossorigin="anonymous" />
+
+</head>
+
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://tjones879.github.io/blog"><h1 class="title is-4">/home/tdjones</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/tjones879" target="_blank">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="https://www.linkedin.com/in/tdjones879/" target="_blank">
+            <span class="icon">
+              <i class="fa fa-linkedin-square"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="mailto:tdjones879@gmail.com" target="_blank">
+            <span class="icon">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">NES Architecture</h1>
+    <h2 class="subtitle is-5">May 31, 2018 by Tyler Jones</h2>
+    
+    <div class="content">
+      
+
+<p>As many people are aware, the NES was released in the early 1980&rsquo;s,
+and as a result had fairly simple hardware. These are some of the
+important components to consider:</p>
+
+<ul>
+<li>A modified <strong>MOS 6502</strong> running at 1.79MHz, (similar to the
+Commodore 64 sans binary coded decimal).</li>
+<li>An <strong>audio processing unit</strong> (APU) in the RP2A03</li>
+<li>A <strong>picture processing unit</strong> (PPU) in the form of the 2C02</li>
+<li>Separate 16kB address spaces in the CPU and PPU with support for
+about 200 mappers that are responsible for translating the
+graphical and program memory into the above address spaces
+<br /></li>
+</ul>
+
+<p>Each of these will be further explored independently both in this post
+and their possible respective design posts.</p>
+
+<h2 id="cpu-6502">CPU - 6502</h2>
+
+<p>The MOS 6502 is an 8-bit processor with only 6 special-purpose registers
+and, as stated above, a 16kB addressable memory space. What makes this
+processor fairly interesting is the presence of several addressing modes:</p>
+
+<ul>
+<li>Accumulator:  Many instructions can operate directly on the accumulator</li>
+<li>Immediate:    Values prepended as <code>#&lt;value&gt;</code> will use the value itself instead
+            of an address</li>
+<li>Zero page:    The value is fetched as an 8-bit address within the zero page</li>
+<li>Absolute:     The value is fetched as a 16-bit address anywhere in memory</li>
+<li>Relative:     Branches can supply an address relative to the current program counter (PC)</li>
+<li>Indirect:     JMP can jump to the address stored in a 16-bit pointer in memory</li>
+</ul>
+
+<p>This is interesting from a design perspective because otherwise identical operations
+may require a different number of clock cycles depending on its addressing mode.
+You may notice in later posts that the CPU&rsquo;s address space has multiple mirrors
+to other locations, meaning that the 64KB memory space is not fully utilized.</p>
+
+<p>Luckily, the 6502 is an old enough processor to not require many of the
+advanced techniques required even for the Gamecube or Nintendo Wii.</p>
+
+<h2 id="apu-rp2a03">APU - RP2A03</h2>
+
+<p>The audio processor is a very simple system to emulate. It consists of only
+5 audio channels, each mostly composed of 3 or 4 8-bit registers that define
+their behavior. It is unfortunately not too interesting to observe from a high
+level perspective. Expect an indepth post covering the far more interesting
+Rust implementation details at a later date.</p>
+
+<h2 id="ppu-2c02">PPU - 2C02</h2>
+
+<p>The PPU on the NES is arguably one of the most interesting components in the
+system. It features its own 16kB of memory space separate from the CPU. The
+mappers found on the cartridge are responsible for directing where each segment
+of the address space actually resides.</p>
+
+<h2 id="rom-formats-ines">ROM Formats - iNES</h2>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>Much of the information here can also be found on the wonderful <a href="http://wiki.nesdev.com">nesdev wiki</a>.</li>
+</ul>
+
+    </div>
+    
+        <div class="nav-left">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-architecture%2f" title="Share on Facebook" target="_blank"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-architecture%2f" title="Share on Google+" target="_blank"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-architecture%2f" title="Share on LinkedIn" target="_blank"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=NES%20Architecture - https%3a%2f%2ftjones879.github.io%2fblog%2fnes-architecture%2f" title="Tweet this" target="_blank"><span class="fa fa-twitter fa-2x"></span></a>
+    <a class="nav-item" href="http://www.reddit.com/submit?url=https%3a%2f%2ftjones879.github.io%2fblog%2fnes-architecture%2f&title=NES%20Architecture" title="Share on Reddit" target="_blank"><span class="fa fa-reddit-alien fa-2x" aria-hidden="true"></span></a>
+    
+    </div>
+    
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; 2018 Tyler Jones</p>
+  </div>
+</section>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js" integrity="sha256-+bhVTaRmJ/c07eV80nU8gD2cBBF0rYkf1txqXlrbvb0=" crossorigin="anonymous"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>

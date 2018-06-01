@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>/home/tdjones</title>
-    <link>https://tjones879.github.io/blog/</link>
+    <link>https://blog.tdjones.me/</link>
     <description>Recent content on /home/tdjones</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; 2018 Tyler Jones</copyright>
     <lastBuildDate>Thu, 31 May 2018 20:18:00 -0600</lastBuildDate>
     
-	<atom:link href="https://tjones879.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.tdjones.me/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>NES Architecture</title>
-      <link>https://tjones879.github.io/blog/nes-architecture/</link>
+      <link>https://blog.tdjones.me/nes-architecture/</link>
       <pubDate>Thu, 31 May 2018 20:18:00 -0600</pubDate>
       
-      <guid>https://tjones879.github.io/blog/nes-architecture/</guid>
+      <guid>https://blog.tdjones.me/nes-architecture/</guid>
       <description>As many people are aware, the NES was released in the early 1980&amp;rsquo;s, and as a result had fairly simple hardware. These are some of the important components to consider:
  A modified MOS 6502 running at 1.79MHz, (similar to the Commodore 64 sans binary coded decimal). An audio processing unit (APU) in the RP2A03 A picture processing unit (PPU) in the form of the 2C02 Separate 16kB address spaces in the CPU and PPU with support for about 200 mappers that are responsible for translating the graphical and program memory into the above address spaces   Each of these will be further explored independently both in this post and their possible respective design posts.</description>
     </item>
     
     <item>
       <title>Building a NES Emulator</title>
-      <link>https://tjones879.github.io/blog/nes-emulator/</link>
+      <link>https://blog.tdjones.me/nes-emulator/</link>
       <pubDate>Thu, 31 May 2018 19:14:00 -0600</pubDate>
       
-      <guid>https://tjones879.github.io/blog/nes-emulator/</guid>
+      <guid>https://blog.tdjones.me/nes-emulator/</guid>
       <description>I&amp;rsquo;ve recently gotten into learning how to write emulators. It is generally recommended for newcomers to start by writing a CHIP8 emulator. This is a simple 8 bit virtual machine that demonstrates many components of simple emulator design.
 For experienced developers, CHIP8 should not pose much of a problem. Popular systems to move onto are the very popular NES and GBA. These are still relatively simple systems but start to pose actual design requirements.</description>
     </item>
     
     <item>
       <title>GSoC 2017 -- A Postmortem</title>
-      <link>https://tjones879.github.io/blog/gsoc-2017/</link>
+      <link>https://blog.tdjones.me/gsoc-2017/</link>
       <pubDate>Mon, 14 Aug 2017 18:36:21 -0600</pubDate>
       
-      <guid>https://tjones879.github.io/blog/gsoc-2017/</guid>
+      <guid>https://blog.tdjones.me/gsoc-2017/</guid>
       <description>GSoC 2017 is quickly coming to a close, and I wanted to keep a log of my decisions and changes over the past few months in a single post. This will hopefully serve as a component of my final submission alongside the corresponding mailing-list threads and git commits.
 For anybody that has not read my previous posts on this blog and wants to learn more about some of the things discussed here, please read those posts and provide me with any feedback you have.</description>
     </item>
     
     <item>
       <title>Transient Detection</title>
-      <link>https://tjones879.github.io/blog/transient-detection/</link>
+      <link>https://blog.tdjones.me/transient-detection/</link>
       <pubDate>Mon, 07 Aug 2017 18:38:10 -0600</pubDate>
       
-      <guid>https://tjones879.github.io/blog/transient-detection/</guid>
+      <guid>https://blog.tdjones.me/transient-detection/</guid>
       <description>&lt;p&gt;&lt;/p&gt;</description>
     </item>
     

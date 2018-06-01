@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on /home/tdjones</title>
-    <link>https://tjones879.github.io/blog/tags/</link>
+    <link>https://blog.tdjones.me/tags/</link>
     <description>Recent content in Tags on /home/tdjones</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; 2018 Tyler Jones</copyright>
     
-	<atom:link href="https://tjones879.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.tdjones.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

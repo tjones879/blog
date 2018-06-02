@@ -128,6 +128,22 @@ of the address space actually resides.</p>
 
 <h2 id="rom-formats-ines">ROM Formats - iNES</h2>
 
+<p>iNES is the standard format for NES ROM&rsquo;s. It consists of a very simple 16 byte
+header followed by all PRG and CHR ROM data. The file format for ROM&rsquo;s is simple
+enough by itself, but emulating the actual cartridges for the NES is deceptively
+complex.</p>
+
+<p>Officially, the NES could support 16KB or 32KB of PRG ROM and 8KB of CHR ROM. Anything
+beyond these resources required additional hardware to implement features manually.
+As a result, there are dozens of popular implementations of cartridge hardware.</p>
+
+<p>The <a href="https://nerdlypleasures.blogspot.com/2016/03/nes-powerpak-and-everdrive-n8-mapper.html">PowerPak</a>
+is the most extreme example of this madness. It allows users to insert a Compact Flash
+card formatted as FAT32 and load dozens of games among other features.</p>
+
+<p>Many modern emulators also support submappers for common mappings that correctly emulate
+sometimes faulty or buggy behavior in specific cartridges.</p>
+
 <h2 id="resources">Resources</h2>
 
 <ul>

@@ -1,0 +1,4 @@
+baseURL = "https://blog.tdjones.dev/"
+languageCode = "en-us"
+title = "Tyler Jones"
+theme = "tufte"

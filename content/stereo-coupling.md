@@ -1,7 +1,7 @@
 ---
 title: "Stereo Coupling"
 date: 2017-08-09T11:26:12-06:00
-draft: true
+draft: "true"
 ---
 
 *This is part of a series of posts designed to document the processes I

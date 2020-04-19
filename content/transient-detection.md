@@ -1,6 +1,7 @@
 ---
 title: "Transient Detection"
 date: 2017-08-07T18:38:10-06:00
+draft: "true"
 ---
 <!--more-->
 

@@ -1,14 +1,13 @@
-<<<<<<< HEAD
-baseURL = "https://blog.tdjones.dev/"
+baseURL = "https://blog.tjones.dev/"
 languageCode = "en-us"
 title = "Tyler Jones"
 theme = "tufte"
 =======
-baseurl = "https://tjones879.github.io/blog"
+baseurl = "https://blog.tjones.dev"
 languageCode = "en"
-title = "/home/tdjones"
+title = "/home/tjones"
 theme = "hucore"
-copyright = "&copy; 2018 Tyler Jones"
+copyright = "&copy; 2020 Tyler Jones"
 
 pygmentsStyle = "perldoc"
 pygmentsUseClasses = false
@@ -35,6 +34,5 @@ url = "https://www.linkedin.com/in/tdjones879/"
 fa_icon = "fa-linkedin-square"
 
 [[params.social]]
-url = "mailto:tdjones879@gmail.com"
+url = "mailto:blog@tjones.dev"
 fa_icon = "fa-envelope"
->>>>>>> e0134fb... Update copyright. Add linkedin
